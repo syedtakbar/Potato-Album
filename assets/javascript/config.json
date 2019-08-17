@@ -1,0 +1,16 @@
+{
+    "web": {
+        "client_id": "137123594979-ian7b2a2qullo5lj0chv4cfeu6hhklim.apps.googleusercontent.com",
+        "project_id": "boot-camp-class--1565968326612",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "aXPml-z1dNWPezNfgOTgod0T",
+        "redirect_uris": [
+            "https://syedtakbar.github.io/Potato-Album/"
+        ],
+        "javascript_origins": [
+            "https://syedtakbar.github.io"
+        ]
+    }
+}

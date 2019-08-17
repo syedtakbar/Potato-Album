@@ -1,3 +1,5 @@
 #head-line {
     color: rebeccapurple;
+    text-align: center;
+    border: 1px double purple;
 }
