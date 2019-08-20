@@ -168,7 +168,7 @@
                     (file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : "n/a");
       
       document.getElementById('list').innerHTML = output;     
-      callback(file.name);      
+      callback(window.URL.createObjectURL(file));      
     },
 
     loadImage: function (imageFile) {         
