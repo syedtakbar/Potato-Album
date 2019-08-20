@@ -56,6 +56,8 @@
                         console.log("GAPI client loaded for API"); 
       }, function(err) { 
                         console.error("Error loading GAPI client for API", err); 
+                        console.log(this.APIKey);
+                        console.log(this.ClientURL);
       });
     },
 
