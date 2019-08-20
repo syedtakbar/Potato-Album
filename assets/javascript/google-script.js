@@ -91,7 +91,7 @@
       console.log(JSON.stringify(albumObj));
       
       return gapi.client.photoslibrary.albums.create(albumObj)
-        .then(this.displayAPICallResult(response),this.logError( "Error calling albums.create API ")); 
+        .then(this.displayAPICallResult(),this.logError( "Error calling albums.create API ")); 
     },
 
     displayAPICallResult: function () {
