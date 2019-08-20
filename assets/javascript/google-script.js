@@ -42,10 +42,10 @@
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })
-      .then(this.logAuthResult("", true),this.logAuthResult(err, false));
+      .then(this.logAuthResult(true),this.logAuthResult(false));
     },
 
-    logAuthResult: function (err, isSuccess) {
+    logAuthResult: function (isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
@@ -56,7 +56,7 @@
       }
       else
       {
-        h3Elem.innerText = "Error signing in " + err;
+        h3Elem.innerText = "Error signing in " ;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -65,10 +65,10 @@
     loadClient: function (apiKey, clientURL) {
       gapi.client.setApiKey(apiKey);
       return gapi.client.load(clientURL)
-      .then(this.LoadClientResult("", true),this.LoadClientResult(err, false));
+      .then(this.LoadClientResult(true),this.LoadClientResult(false));
     },
 
-    LoadClientResult: function (err, isSuccess) {
+    LoadClientResult: function ( isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
@@ -79,7 +79,7 @@
       }
       else
       {
-        h3Elem.innerText = "Error loading GAPI client for API " + err;
+        h3Elem.innerText = "Error loading GAPI client for API ";
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -116,13 +116,12 @@
 
     createAlbum: function (albumName) {      
       return gapi.client.photoslibrary.albums.create({
-          "resource": {
-                  "album": {
-                            "title": albumName
-                  }
-          }
-      })
-      .then(this.createAlbumResult(response, true), this.createAlbumResult(err, false));
+                                                        "resource": {
+                                                                "album": {
+                                                                          "title": albumName
+                                                                }
+                                                        }
+      }).then(this.createAlbumResult(response, true), this.createAlbumResult(err, false));
     },
 
     createAlbumResult: function (response, isSuccess) {
@@ -136,7 +135,7 @@
       }
       else
       {
-        h3Elem.innerText = "Execute error : " + response ;
+        h3Elem.innerText = "Execute error : " ;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
