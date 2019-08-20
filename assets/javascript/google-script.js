@@ -42,58 +42,35 @@
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })     
-      .then(
-        function() {
-          this.logAuthResult(null).bind(GoogleObj);
-        },
-        function(err) {                
-          this.logAuthResult(err).bind(GoogleObj);
-        });
+      .then(logAuthResult,logError(err, "Error signing in"));
     },
 
-    logAuthResult: function (err) {
+    logAuthResult: function () {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
+      h3Elem.innerText = "Sign-in successful";
+      this.resultDiv.append(h3Elem); 
+    },
 
-      if (err === null)
-      {
-        h3Elem.innerText = "Sign-in successful";
-      }
-      else
-      {
-        h3Elem.innerText = "Error signing in " +  err;
-        h3Elem.style = "color: red";
-      }
+    logError: function (err, message) {
+      this.resultDiv.innerHTML = "";
+      h3Elem.innerText = message + " " +  err;
+      h3Elem.style = "color: red";
       this.resultDiv.append(h3Elem); 
     },
 
     loadClient: function (apiKey, clientURL) {
       gapi.client.setApiKey(apiKey);
       return gapi.client.load(clientURL)      
-      .then(
-        function() {
-          this.LoadClientResult(null).bind(GoogleObj);
-        },
-        function(err) {                
-          this.LoadClientResult(err).bind(GoogleObj);
-        });
+      .then(LoadClientResult,logError(err, "Error loading GAPI client for API "));
     },
 
-    LoadClientResult: function (err) {
+    LoadClientResult: function () {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
-
-      if (err === null)
-      {
-        h3Elem.innerText = "GAPI client loaded for API";
-      }
-      else
-      {
-        h3Elem.innerText = "Error loading GAPI client for API " + err;
-        h3Elem.style = "color: red";
-      }
+      h3Elem.innerText = "GAPI client loaded for API";
       this.resultDiv.append(h3Elem); 
     },
 
@@ -106,30 +83,7 @@
             "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
           ]
         }
-      }).then(
-        function(response) {
-          this.uploadMediaResult(response.result, true).bind(GoogleObj);
-        },
-        function(err) {                
-          this.uploadMediaResult(err.message, false).bind(GoogleObj);
-        });
-    },
-
-    uploadMediaResult: function (result, isSuccess) {
-
-      this.resultDiv.innerHTML = "";
-      const h3Elem = document.createElement("h3");
-
-      if (isSuccess === true)
-      {
-        h3Elem.innerText = result;
-      }
-      else
-      {
-        h3Elem.innerText = "Execute error " + result;
-        h3Elem.style = "color: red";
-      }
-      this.resultDiv.append(h3Elem); 
+      }).then(displayAPICallResult(response),logError(err, "Error calling batchAddMediaItems API "));
     },
 
     createAlbum: function (albumName) {     
@@ -144,30 +98,15 @@
       console.log(JSON.stringify(albumObj));
       
       return gapi.client.photoslibrary.albums.create(albumObj)
-        .then(
-              function(response) {
-                this.createAlbumResult(response.result, true).bind(GoogleObj);
-              },
-              function(err) {                
-                this.createAlbumResult(err.message, false).bind(GoogleObj);
-              });
+        .then(displayAPICallResult(response),logError(err, "Error calling albums.create API ")); 
     },
 
-    createAlbumResult: function (result, isSuccess) {
+    displayAPICallResult: function (result) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
-
-      if (isSuccess === true)
-      {
-        h3Elem.innerText = result;
-      }
-      else
-      {
-        h3Elem.innerText = "Execute error : " + result ;
-        h3Elem.style = "color: red";
-      }
-      this.resultDiv.append(h3Elem); 
+      h3Elem.innerText = result;
+      this.resultDiv.append(h3Elem);        
     },
 
   };
