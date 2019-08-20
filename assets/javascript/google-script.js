@@ -42,10 +42,10 @@
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })
-      .then(this.logAuthResult(true),this.logAuthResult(false));
+      .then(this.logAuthResult("", true),this.logAuthResult(err, false));
     },
 
-    logAuthResult: function (isSuccess) {
+    logAuthResult: function (err, isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
@@ -56,7 +56,7 @@
       }
       else
       {
-        h3Elem.innerText = "Error signing in";
+        h3Elem.innerText = "Error signing in " + err;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -65,10 +65,10 @@
     loadClient: function (apiKey, clientURL) {
       gapi.client.setApiKey(apiKey);
       return gapi.client.load(clientURL)
-      .then(this.LoadClientResult(true),this.LoadClientResult(false));
+      .then(this.LoadClientResult("", true),this.LoadClientResult(err, false));
     },
 
-    LoadClientResult: function (isSuccess) {
+    LoadClientResult: function (err, isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
@@ -79,7 +79,7 @@
       }
       else
       {
-        h3Elem.innerText = "Error loading GAPI client for API";
+        h3Elem.innerText = "Error loading GAPI client for API " + err;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -94,10 +94,10 @@
             "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
           ]
         }
-      }).then(this.uploadMediaResult(true),this.uploadMediaResult(false));
+      }).then(this.uploadMediaResult(response, true),this.uploadMediaResult(err, false));
     },
 
-    uploadMediaResult: function (isSuccess) {
+    uploadMediaResult: function (response, isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
@@ -108,7 +108,7 @@
       }
       else
       {
-        h3Elem.innerText = "Execute error";
+        h3Elem.innerText = "Execute error " + response;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -122,10 +122,10 @@
                   }
           }
       })
-      .then(this.createAlbumResult(true), this.createAlbumResult(false));
+      .then(this.createAlbumResult(response, true), this.createAlbumResult(err, false));
     },
 
-    createAlbumResult: function (isSuccess) {
+    createAlbumResult: function (response, isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
@@ -136,7 +136,7 @@
       }
       else
       {
-        h3Elem.innerText = "Execute error";
+        h3Elem.innerText = "Execute error : " + response ;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
