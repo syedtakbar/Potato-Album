@@ -114,14 +114,19 @@
       this.resultDiv.append(h3Elem); 
     },
 
-    createAlbum: function (albumName) {      
-      return gapi.client.photoslibrary.albums.create({
-                                                        "resource": {
-                                                                "album": {
-                                                                          "title": albumName
-                                                                }
-                                                        }
-      }).then(this.createAlbumResult(response, true), this.createAlbumResult(err, false));
+    createAlbum: function (albumName) {     
+      
+   
+      const albumObj = {
+        resource: album = {
+                            title: albumName,
+                          },
+      };
+
+      console.log(JSON.stringify(albumObj));
+      
+      return gapi.client.photoslibrary.albums.create(albumObj)
+            .then(this.createAlbumResult(response, true), this.createAlbumResult(err, false));
     },
 
     createAlbumResult: function (response, isSuccess) {
