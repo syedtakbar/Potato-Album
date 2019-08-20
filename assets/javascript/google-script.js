@@ -24,7 +24,7 @@
     ClientURL: "https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest",
 
     init : function() {
-      this.gapiload(this.Clientid.bind(GoogleObj));      
+      this.gapiload(this.Clientid);      
     },
 
     getRandomInt: function (min, max) {
@@ -41,7 +41,7 @@
 
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
-      .signIn({scope: this.SignInScope.bind(GoogleObj) })
+      .signIn({scope: this.SignInScope })
       .then(function() { 
                           console.log("Sign-in successful"); 
       }, function(err) { 
@@ -50,8 +50,8 @@
     },
 
     loadClient: function () {
-      gapi.client.setApiKey(this.APIKey.bind(GoogleObj));
-      return gapi.client.load(this.ClientURL.bind(GoogleObj))
+      gapi.client.setApiKey(this.APIKey);
+      return gapi.client.load(this.ClientURL)
       .then(function() { 
                         console.log("GAPI client loaded for API"); 
       }, function(err) { 
