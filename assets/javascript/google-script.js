@@ -44,10 +44,10 @@
       .signIn({scope: this.SignInScope })     
       .then(
         function() {
-          this.logAuthResult();
+          this.logAuthResult(null).bind(GoogleObj);
         },
         function(err) {                
-          this.logAuthResult(err, false);
+          this.logAuthResult(err).bind(GoogleObj);
         });
     },
 
@@ -73,10 +73,10 @@
       return gapi.client.load(clientURL)      
       .then(
         function() {
-          this.LoadClientResult();
+          this.LoadClientResult(null).bind(GoogleObj);
         },
         function(err) {                
-          this.LoadClientResult(err, false);
+          this.LoadClientResult(err).bind(GoogleObj);
         });
     },
 
@@ -108,10 +108,10 @@
         }
       }).then(
         function(response) {
-          this.uploadMediaResult(response.result, true);
+          this.uploadMediaResult(response.result, true).bind(GoogleObj);
         },
         function(err) {                
-          this.uploadMediaResult(err, false);
+          this.uploadMediaResult(err.message, false).bind(GoogleObj);
         });
     },
 
@@ -146,10 +146,10 @@
       return gapi.client.photoslibrary.albums.create(albumObj)
         .then(
               function(response) {
-                this.createAlbumResult(response.result, true);
+                this.createAlbumResult(response.result, true).bind(GoogleObj);
               },
               function(err) {                
-                this.createAlbumResult(err, false);
+                this.createAlbumResult(err.message, false).bind(GoogleObj);
               });
     },
 
