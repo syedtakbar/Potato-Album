@@ -24,7 +24,7 @@
     ClientURL: "https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest",
 
     init : function() {
-      this.gapiload();      
+      this.gapiload(this.Clientid.bind(GoogleObj));      
     },
 
     getRandomInt: function (min, max) {
@@ -33,9 +33,9 @@
      return Math.floor(Math.random() * (max - min + 1)) + min;
     }  ,
 
-    gapiload: function () {  
+    gapiload: function (clientId) {  
               gapi.load("client:auth2", function() {
-                        gapi.auth2.init({client_id: this.Clientid.bind(GoogleObj)});
+                        gapi.auth2.init({client_id: clientId});
               });
     }, 
 
@@ -57,6 +57,23 @@
       }, function(err) { 
                         console.error("Error loading GAPI client for API", err); 
       });
+    },
+
+    uploadPicture: function () {
+
+      return gapi.client.photoslibrary.albums.batchAddMediaItems({
+        "albumId": "AGuxb8ZfXlw711cBZVR26eVjuyx1ocnV85rUesB4PdS3ewFW0_C3_EAT62tDesaVzZD__TGb_g9b",
+        "resource": {
+          "mediaItemIds": [
+            "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
+          ]
+        }
+      })
+          .then(function(response) {
+                  // Handle the results here (response.result has the parsed body).
+                  console.log("Response", response);
+                },
+                function(err) { console.error("Execute error", err); });
     },
 
 
@@ -94,7 +111,28 @@
     img.style = "width: 200px; height:200px;";
     GoogleObj.picDiv.appendChild(img);
   });
+
+  GoogleObj.uploadPicButton.addEventListener("click", function () {
+    GoogleObj.uploadPicture();
+    GoogleObj.picDiv.innerHTML = "";
+  });
+
+
+  
  
+
+
+
+
+
+  
+  function execute() {
+    
+  }
+
+
+
+
   //authenticate().then(loadClient)
 
 
