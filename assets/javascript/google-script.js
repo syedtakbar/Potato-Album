@@ -104,6 +104,7 @@
 
     logError: function (errMessage) {
       this.resultDiv.innerHTML = "";
+      const h3Elem = document.createElement("h3");
       h3Elem.innerText = errMessage;
       h3Elem.style = "color: red";
       this.resultDiv.append(h3Elem); 
