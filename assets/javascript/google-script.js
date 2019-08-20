@@ -57,7 +57,7 @@
       else
       {
         h3Elem.innerText = "Error signing in";
-        h3Elem.style = "background-color: red";
+        h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
     },
@@ -80,7 +80,7 @@
       else
       {
         h3Elem.innerText = "Error loading GAPI client for API";
-        h3Elem.style = "background-color: red";
+        h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
     },
@@ -109,7 +109,7 @@
       else
       {
         h3Elem.innerText = "Execute error";
-        h3Elem.style = "background-color: red";
+        h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
     },
