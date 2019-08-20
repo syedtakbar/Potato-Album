@@ -66,7 +66,7 @@
       h3Elem.innerText = "GAPI client loaded for API";
       this.resultDiv.append(h3Elem); 
     },
-
+    
     uploadPicture: function () {
 
       return gapi.client.photoslibrary.albums.batchAddMediaItems({
@@ -76,7 +76,7 @@
             "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
           ]
         }
-      }).then(this.displayAPICallResult(response),this.logError( "Error calling batchAddMediaItems API "));
+      }).then(this.displayAPICallResult,this.logError( "Error calling batchAddMediaItems API "));
     },
 
     createAlbum: function (albumName) {     
@@ -94,11 +94,11 @@
         .then(this.displayAPICallResult(response),this.logError( "Error calling albums.create API ")); 
     },
 
-    displayAPICallResult: function (result) {
+    displayAPICallResult: function () {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
-      h3Elem.innerText = result;
+      h3Elem.innerText = response;
       this.resultDiv.append(h3Elem);        
     },
 
