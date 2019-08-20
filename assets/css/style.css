@@ -13,13 +13,14 @@
 
 }
 
-.reg-btn {
+#files, #list, .reg-btn {
     border-radius: 5px;
     padding: 2px;
     margin: 2px;
+    color:rebeccapurple;
 }
 
-#div-result, #div-button, #div-album {
+#div-list, #div-result, #div-button, #div-album {
     border-radius: 5px;
     padding: 5px;
     margin: 5px;

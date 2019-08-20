@@ -16,15 +16,21 @@
             <input type="text" class="form-control" id="album-input" placeholder="Album Name"
               maxlength="30">
         </div>
-        <br>
+        <div id="div-list">            
+            <!-- <input type="file" id="get-files" name="files[]"" multiple /> -->
+            <input type="file" id="get-file" name="file" single accept="image/*"  />
+            <output id="list"></output>
+        </div>        
+        <br>        
         <div id="div-result"></div>
         <br>
         <div id="div-pic"></div>        
         <br>
         <div id="div-button">
             <button class="reg-btn" id ="log-in">Log-in</button>
-            <button class="reg-btn" id ="get-pic">Picture</button> 
-            <button class="reg-btn" id ="create-album">Create Album</button>                       
+            <button class="reg-btn" id ="create-album">Create Album</button>  
+            <button class="reg-btn" id ="get-file">Choose Pic</button>              
+            <button class="reg-btn" id ="get-pic">Picture</button>                                  
             <button class="reg-btn" id ="upload-pic">Upload</button>
         </div>
         <br>
