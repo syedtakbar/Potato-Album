@@ -42,7 +42,7 @@
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })     
-      .then(logAuthResult,logError(err, "Error signing in"));
+      .then(this.logAuthResult,this.logError(err, "Error signing in"));
     },
 
     logAuthResult: function () {
@@ -53,17 +53,10 @@
       this.resultDiv.append(h3Elem); 
     },
 
-    logError: function (err, message) {
-      this.resultDiv.innerHTML = "";
-      h3Elem.innerText = message + " " +  err;
-      h3Elem.style = "color: red";
-      this.resultDiv.append(h3Elem); 
-    },
-
     loadClient: function (apiKey, clientURL) {
       gapi.client.setApiKey(apiKey);
       return gapi.client.load(clientURL)      
-      .then(LoadClientResult,logError(err, "Error loading GAPI client for API "));
+      .then(this.LoadClientResult,this.logError(err, "Error loading GAPI client for API "));
     },
 
     LoadClientResult: function () {
@@ -83,7 +76,7 @@
             "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
           ]
         }
-      }).then(displayAPICallResult(response),logError(err, "Error calling batchAddMediaItems API "));
+      }).then(this.displayAPICallResult(response),this.logError(err, "Error calling batchAddMediaItems API "));
     },
 
     createAlbum: function (albumName) {     
@@ -98,7 +91,7 @@
       console.log(JSON.stringify(albumObj));
       
       return gapi.client.photoslibrary.albums.create(albumObj)
-        .then(displayAPICallResult(response),logError(err, "Error calling albums.create API ")); 
+        .then(this.displayAPICallResult(response),this.logError(err, "Error calling albums.create API ")); 
     },
 
     displayAPICallResult: function (result) {
@@ -108,6 +101,13 @@
       h3Elem.innerText = result;
       this.resultDiv.append(h3Elem);        
     },
+
+    logError: function (err, message) {
+      this.resultDiv.innerHTML = "";
+      h3Elem.innerText = message + " " +  err;
+      h3Elem.style = "color: red";
+      this.resultDiv.append(h3Elem); 
+    }
 
   };
 
