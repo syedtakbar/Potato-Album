@@ -62,9 +62,9 @@
       this.resultDiv.append(h3Elem); 
     },
 
-    loadClient: function () {
-      gapi.client.setApiKey(this.APIKey.bind(GoogleObj));
-      return gapi.client.load(this.ClientURL.bind(GoogleObj))
+    loadClient: function (apiKey, clientURL) {
+      gapi.client.setApiKey(apiKey);
+      return gapi.client.load(clientURL)
       .then(this.LoadClientResult(true),this.LoadClientResult(false));
     },
 
@@ -137,7 +137,7 @@
       else
       {
         h3Elem.innerText = "Execute error";
-        h3Elem.style = "background-color: red";
+        h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
     },
@@ -145,7 +145,7 @@
   };
 
   GoogleObj.authButton.addEventListener("click", function () {          
-          GoogleObj.authenticate().then(GoogleObj.loadClient);
+          GoogleObj.authenticate().then(GoogleObj.loadClient(GoogleObj.apiKey, GoogleObj.ClientURL));
   });
 
   GoogleObj.createAlbumButton.addEventListener("click", function () {
@@ -166,6 +166,6 @@
     GoogleObj.uploadPicture();
     GoogleObj.picDiv.innerHTML = "";
   });
-  
+
 
 
