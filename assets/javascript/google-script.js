@@ -41,22 +41,28 @@
 
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
-      .signIn({scope: this.SignInScope })
-      .then(this.logAuthResult(true),this.logAuthResult(false));
+      .signIn({scope: this.SignInScope })     
+      .then(
+        function() {
+          this.logAuthResult();
+        },
+        function(err) {                
+          this.logAuthResult(err, false);
+        });
     },
 
-    logAuthResult: function (isSuccess) {
+    logAuthResult: function (err) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
 
-      if (isSuccess === true)
+      if (err === null)
       {
         h3Elem.innerText = "Sign-in successful";
       }
       else
       {
-        h3Elem.innerText = "Error signing in " ;
+        h3Elem.innerText = "Error signing in " +  err;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -64,22 +70,28 @@
 
     loadClient: function (apiKey, clientURL) {
       gapi.client.setApiKey(apiKey);
-      return gapi.client.load(clientURL)
-      .then(this.LoadClientResult(true),this.LoadClientResult(false));
+      return gapi.client.load(clientURL)      
+      .then(
+        function() {
+          this.LoadClientResult();
+        },
+        function(err) {                
+          this.LoadClientResult(err, false);
+        });
     },
 
-    LoadClientResult: function ( isSuccess) {
+    LoadClientResult: function (err) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
 
-      if (isSuccess === true)
+      if (err === null)
       {
         h3Elem.innerText = "GAPI client loaded for API";
       }
       else
       {
-        h3Elem.innerText = "Error loading GAPI client for API ";
+        h3Elem.innerText = "Error loading GAPI client for API " + err;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -94,21 +106,27 @@
             "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
           ]
         }
-      }).then(this.uploadMediaResult(response, true),this.uploadMediaResult(err, false));
+      }).then(
+        function(response) {
+          this.uploadMediaResult(response.result, true);
+        },
+        function(err) {                
+          this.uploadMediaResult(err, false);
+        });
     },
 
-    uploadMediaResult: function (response, isSuccess) {
+    uploadMediaResult: function (result, isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
 
       if (isSuccess === true)
       {
-        h3Elem.innerText = response.result;
+        h3Elem.innerText = result;
       }
       else
       {
-        h3Elem.innerText = "Execute error ";
+        h3Elem.innerText = "Execute error " + result;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -126,21 +144,27 @@
       console.log(JSON.stringify(albumObj));
       
       return gapi.client.photoslibrary.albums.create(albumObj)
-            .then(this.createAlbumResult(response, true), this.createAlbumResult(err, false));
+        .then(
+              function(response) {
+                this.createAlbumResult(response.result, true);
+              },
+              function(err) {                
+                this.createAlbumResult(err, false);
+              });
     },
 
-    createAlbumResult: function (response, isSuccess) {
+    createAlbumResult: function (result, isSuccess) {
 
       this.resultDiv.innerHTML = "";
       const h3Elem = document.createElement("h3");
 
       if (isSuccess === true)
       {
-        h3Elem.innerText = response.result;
+        h3Elem.innerText = result;
       }
       else
       {
-        h3Elem.innerText = "Execute error : " ;
+        h3Elem.innerText = "Execute error : " + result ;
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
