@@ -42,23 +42,47 @@
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })
-      .then(function() { 
-                          console.log("Sign-in successful"); 
-      }, function(err) { 
-                          console.error("Error signing in", err); 
-      });
+      .then(logAuthResult(true),logAuthResult(false));
+    },
+
+    logAuthResult: function (isSuccess) {
+
+      this.resultDiv.innerHTML = "";
+      const h3Elem = document.createElement("h3");
+
+      if (isSuccess === true)
+      {
+        h3Elem.innerText = "Sign-in successful";
+      }
+      else
+      {
+        h3Elem.innerText = "Error signing in";
+        h3Elem.style = "background-color: red";
+      }
+      this.resultDiv.append(h3Elem); 
     },
 
     loadClient: function () {
-      gapi.client.setApiKey(this.APIKey);
-      return gapi.client.load(this.ClientURL)
-      .then(function() { 
-                        console.log("GAPI client loaded for API"); 
-      }, function(err) { 
-                        console.error("Error loading GAPI client for API", err); 
-                        console.log(this.APIKey);
-                        console.log(this.ClientURL);
-      });
+      gapi.client.setApiKey(this.APIKey.bind(GoogleObj));
+      return gapi.client.load(this.ClientURL.bind(GoogleObj))
+      .then(LoadClientResult(true),LoadClientResult(false));
+    },
+
+    LoadClientResult: function (isSuccess) {
+
+      this.resultDiv.innerHTML = "";
+      const h3Elem = document.createElement("h3");
+
+      if (isSuccess === true)
+      {
+        h3Elem.innerText = "GAPI client loaded for API";
+      }
+      else
+      {
+        h3Elem.innerText = "Error loading GAPI client for API";
+        h3Elem.style = "background-color: red";
+      }
+      this.resultDiv.append(h3Elem); 
     },
 
     uploadPicture: function () {
@@ -70,14 +94,25 @@
             "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
           ]
         }
-      })
-          .then(function(response) {
-                  // Handle the results here (response.result has the parsed body).
-                  console.log("Response", response);
-                },
-                function(err) { console.error("Execute error", err); });
+      }).then(uploadMediaResult(true),uploadMediaResult(false));
     },
 
+    uploadMediaResult: function (isSuccess) {
+
+      this.resultDiv.innerHTML = "";
+      const h3Elem = document.createElement("h3");
+
+      if (isSuccess === true)
+      {
+        h3Elem.innerText = response;
+      }
+      else
+      {
+        h3Elem.innerText = "Execute error";
+        h3Elem.style = "background-color: red";
+      }
+      this.resultDiv.append(h3Elem); 
+    },
 
     createAlbum: function (albumName) {      
       return gapi.client.photoslibrary.albums.create({
@@ -87,11 +122,24 @@
                   }
           }
       })
-      .then(function(response) {
-                                console.log("Response", response);
-      }, function(err) { 
-                          console.error("Execute error", err); 
-      });
+      .then(createAlbumResult(true), createAlbumResult(false));
+    },
+
+    createAlbumResult: function (isSuccess) {
+
+      this.resultDiv.innerHTML = "";
+      const h3Elem = document.createElement("h3");
+
+      if (isSuccess === true)
+      {
+        h3Elem.innerText = response;
+      }
+      else
+      {
+        h3Elem.innerText = "Execute error";
+        h3Elem.style = "background-color: red";
+      }
+      this.resultDiv.append(h3Elem); 
     },
 
   };
