@@ -42,7 +42,7 @@
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })
-      .then(logAuthResult(true),logAuthResult(false));
+      .then(this.logAuthResult(true),this.logAuthResult(false));
     },
 
     logAuthResult: function (isSuccess) {
@@ -65,7 +65,7 @@
     loadClient: function () {
       gapi.client.setApiKey(this.APIKey.bind(GoogleObj));
       return gapi.client.load(this.ClientURL.bind(GoogleObj))
-      .then(LoadClientResult(true),LoadClientResult(false));
+      .then(this.LoadClientResult(true),this.LoadClientResult(false));
     },
 
     LoadClientResult: function (isSuccess) {
@@ -94,7 +94,7 @@
             "https://siciliancookingplus.com/wp-content/uploads/2016/01/03085543-87de-47ab-a4eb-58e7e39d022e-620x372.jpeg"
           ]
         }
-      }).then(uploadMediaResult(true),uploadMediaResult(false));
+      }).then(this.uploadMediaResult(true),this.uploadMediaResult(false));
     },
 
     uploadMediaResult: function (isSuccess) {
@@ -122,7 +122,7 @@
                   }
           }
       })
-      .then(createAlbumResult(true), createAlbumResult(false));
+      .then(this.createAlbumResult(true), this.createAlbumResult(false));
     },
 
     createAlbumResult: function (isSuccess) {
@@ -166,55 +166,6 @@
     GoogleObj.uploadPicture();
     GoogleObj.picDiv.innerHTML = "";
   });
-
-
   
- 
-
-
-
-
-
-  
-  function execute() {
-    
-  }
-
-
-
-
-  //authenticate().then(loadClient)
-
-
-  
-  // function authenticate() {
-  //   return gapi.auth2.getAuthInstance()
-  //       .signIn({scope: "https://www.googleapis.com/auth/photoslibrary"})
-  //       .then(function() { console.log("Sign-in successful"); },
-  //             function(err) { console.error("Error signing in", err); });
-  // }
-
-  // function loadClient() {
-  //   gapi.client.setApiKey("AIzaSyCBYvgkH707PEctHZZ22ufrvU_SNvqT5p8");
-  //   return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest")
-  //       .then(function() { console.log("GAPI client loaded for API"); },
-  //             function(err) { console.error("Error loading GAPI client for API", err); });
-  // }
-  // // Make sure the client is loaded and sign-in is complete before calling this method.
-  // function execute() {
-  //   return gapi.client.photoslibrary.albums.create({
-  //     "resource": {
-  //       "album": {
-  //         "title": "Potato-App"
-  //       }
-  //     }
-  //   })
-  //       .then(function(response) {
-  //               // Handle the results here (response.result has the parsed body).
-  //               console.log("Response", response);
-  //             },
-  //             function(err) { console.error("Execute error", err); });
-  // }
-
 
 
