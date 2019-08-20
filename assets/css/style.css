@@ -2,4 +2,25 @@
     color: rebeccapurple;
     text-align: center;
     border: 1px double purple;
+    border-radius: 5px;
+}
+
+#lable-name, #album-input {
+    border-radius: 5px;
+    padding: 2px;
+    margin: 2px;
+
+}
+
+.reg-btn {
+    border-radius: 5px;
+    padding: 2px;
+    margin: 2px;
+}
+
+#div-result, #div-button, #div-album {
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+
 }
