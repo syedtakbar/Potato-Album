@@ -104,11 +104,11 @@
 
       if (isSuccess === true)
       {
-        h3Elem.innerText = response;
+        h3Elem.innerText = response.result;
       }
       else
       {
-        h3Elem.innerText = "Execute error " + response;
+        h3Elem.innerText = "Execute error ";
         h3Elem.style = "color: red";
       }
       this.resultDiv.append(h3Elem); 
@@ -131,7 +131,7 @@
 
       if (isSuccess === true)
       {
-        h3Elem.innerText = response;
+        h3Elem.innerText = response.result;
       }
       else
       {
