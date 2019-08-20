@@ -35,13 +35,13 @@
 
     gapiload: function () {  
               gapi.load("client:auth2", function() {
-                        gapi.auth2.init({client_id: this.Clientid});
+                        gapi.auth2.init({client_id: this.Clientid.bind(GoogleObj)});
               });
     }, 
 
     authenticate: function () {
       return gapi.auth2.getAuthInstance()
-      .signIn({scope: this.SignInScope })
+      .signIn({scope: this.SignInScope.bind(GoogleObj) })
       .then(function() { 
                           console.log("Sign-in successful"); 
       }, function(err) { 
@@ -50,8 +50,8 @@
     },
 
     loadClient: function () {
-      gapi.client.setApiKey(this.APIKey);
-      return gapi.client.load(this.ClientURL)
+      gapi.client.setApiKey(this.APIKey.bind(GoogleObj));
+      return gapi.client.load(this.ClientURL.bind(GoogleObj))
       .then(function() { 
                         console.log("GAPI client loaded for API"); 
       }, function(err) { 
