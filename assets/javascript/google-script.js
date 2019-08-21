@@ -1,3 +1,6 @@
+  window.onload = function(){    
+    GoogleObj.init();
+  };
 
   const Logger  = {
          
@@ -36,6 +39,7 @@
   };
 
   const GoogleObj = {
+    FileToUpload: {},
     googleObj: this,
     albumObj : {},
     images : ["./assets/images/crystal-1.jpg", "./assets/images/crystal-2.jpg", "./assets/images/crystal-3.jpg", "./assets/images/crystal-4.jpg"],
@@ -73,8 +77,7 @@
               });
     }, 
 
-    authenticate: function () {      
-      this.init();
+    authenticate: function () {            
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })     
       .then(Logger.logResult,Logger.logError);
@@ -90,7 +93,7 @@
 
 
     
-    uploadPicture: function (AlbumId, Image) {
+    uploadMediaItem: function (AlbumId, Image) {
     
       const mediaItems = {
         albumId: AlbumId,
@@ -127,9 +130,13 @@
         .then(Logger.logAPIResult,Logger.logError); 
     },
 
-    uploadImage : function (imageFile) {
+    uploadImage : function (imageName, imageContent) {
         
         const url = "https://photoslibrary.googleapis.com/v1/uploads";
+
+        console.log("start to upload images...");
+        console.log("imageName:" + imageName);
+        console.log("imageContent:" + imageContent);
 
           return fetch(url, {
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -137,15 +144,17 @@
               cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
               credentials: 'same-origin', // include, *same-origin, omit
               headers: {
+                 // 'Authorization': "Bearer " + service._http.request.credentials.access_token,
                   'Content-Type': 'application/octet-stream',
-                  'X-Goog-Upload-File-Name': imageFile,
+                  'X-Goog-Upload-File-Name': imageName,
                   'X-Goog-Upload-Protocol': "raw",                  
               },
               redirect: 'follow', // manual, *follow, error
               referrer: 'no-referrer', // no-referrer, *client
-              body: JSON.stringify(data), // body data type must match "Content-Type" header
+              body: JSON.stringify(imageContent), // body data type must match "Content-Type" header
           })
-          .then(response => response.json()); // parses JSON response into native JavaScript objects 
+          .then(response => response.json())
+          .then(consle.log(JSON.stringify(response))); // parses JSON response into native JavaScript objects 
     },
 
     selectFiles: function (evt) {
@@ -167,7 +176,8 @@
                     file.size + " bytes, last modified: " +
                     (file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : "n/a");
       
-      document.getElementById('list').innerHTML = output;     
+      document.getElementById('list').innerHTML = output;  
+      this.FileToUpload = file;         
       callback(window.URL.createObjectURL(file));      
     },
 
@@ -179,10 +189,39 @@
       img.alt = "missing file:" + file;
       img.style = "width: 200px; height:200px;";
       GoogleObj.picDiv.appendChild(img);
+    },
+
+    uploadFile: function (fileToRead, Callback) {
+      var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = function() {
+        const fileContent = reader.result;        
+        console.log(fileContent);
+
+        Callback(fileToRead.name, fileContent);        
+      };
+      
+      reader.readAsDataURL(fileToRead);
+    },
+
+    convertImageToCanvas: function(image) {
+      var canvas = document.createElement("canvas");
+      canvas.width = image.width;
+      canvas.height = image.height;
+      canvas.getContext("2d").drawImage(image, 0, 0);
+    
+      return canvas;
+    },
+
+    convertCanvasToImage: function (canvas) {
+      var image = new Image();
+      image.src = canvas.toDataURL("image/png");
+      return image;
     }
   };
 
-  GoogleObj.authButton.addEventListener("click", function () {                    
+  GoogleObj.authButton.addEventListener("click", function () {                  
           GoogleObj.authenticate().then(GoogleObj.loadClient(GoogleObj.APIKey, GoogleObj.ClientURL));
   });
 
@@ -192,26 +231,26 @@
     GoogleObj.albumInput.value = "";
   });
 
-  GoogleObj.getPicButton.addEventListener("click", function () {  
-    const file =   GoogleObj.images[GoogleObj.getRandomInt(0,3)];
-    GoogleObj.loadImage(file);    
-  });
-
-  GoogleObj.uploadPicButton.addEventListener("click", function () {
-
-    if (Object.entries(GoogleObj.albumObj).length === 0 && GoogleObj.albumObj.constructor === Object)
-    {      
-      return false;
-    }
- 
-    GoogleObj.uploadPicture(GoogleObj.albumObj.id, GoogleObj.picDiv.getElementsByTagName("img")[0].src);
-    
-  });
+  // GoogleObj.getPicButton.addEventListener("click", function () {  
+  //   const file =   GoogleObj.images[GoogleObj.getRandomInt(0,3)];
+  //   GoogleObj.loadImage(file);    
+  // });
 
   GoogleObj.selectFileButton.addEventListener("change", 
     function (event) {
       GoogleObj.selectFile(event, GoogleObj.loadImage);    
-    });
+  });
 
+  GoogleObj.uploadPicButton.addEventListener("click", function () {
 
+    // if (Object.entries(GoogleObj.albumObj).length === 0 && GoogleObj.albumObj.constructor === Object)
+    // {      
+    //   return false;
+    // }
+    //const imageFile = GoogleObj.picDiv.getElementsByTagName("img")[0].src;
+    //const canvas = GoogleObj.convertImageToCanvas(imageFile);
+    GoogleObj.uploadFile(GoogleObj.FileToUpload, GoogleObj.uploadImage);
 
+    //GoogleObj.uploadMediaItem(GoogleObj.albumObj.id, GoogleObj.picDiv.getElementsByTagName("img")[0].src);
+    
+  });
