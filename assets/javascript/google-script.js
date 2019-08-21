@@ -64,7 +64,7 @@
     ClientURL: "https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest",
 
     init : function() {
-      this.gapiload(this.Clientid);      
+      this.gapiload(this.Clientid, this.APIKey);      
     },
 
     getRandomInt: function (min, max) {
@@ -73,9 +73,12 @@
      return Math.floor(Math.random() * (max - min + 1)) + min;
     }  ,
 
-    gapiload: function (clientId) {  
+    gapiload: function (clientId, APIKey) {  
               gapi.load("client:auth2", function() {
-                        gapi.auth2.init({client_id: clientId});
+                        gapi.auth2.init({client_id: clientId,
+                        apiKey: APIKey,
+                        discoveryDocs: "https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest",
+                        scope : "https://www.googleapis.com/auth/plus.login  https://www.googleapis.com/auth/photoslibrary"});
               });
     }, 
 
@@ -141,7 +144,18 @@
         // console.log("start to upload images...");
         // console.log("imageName:" + imageName);
         // console.log("imageContent:" + imageContent);
-        console.log(accessToken );
+        //const newToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;  
+        //console.log("oldToken " + accessToken );
+        //console.log("newToken " + newToken );
+
+          const formData = new FormData();
+          const fileField = document.querySelector('input[type="file"]');
+
+          //formData.append('test', '123');
+          formData.append(imageName, fileField.files[0]);
+
+          
+
           return fetch(url, {
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
               mode: 'no-cors', // no-cors, cors, *same-origin
@@ -150,9 +164,9 @@
                   'Authorization': "Bearer " + accessToken,
                   'Content-Type': 'application/octet-stream',
                   'X-Goog-Upload-File-Name': imageName,
-                  'X-Goog-Upload-Protocol': "raw",                  
+                  'X-Goog-Upload-Protocol': "raw"                  
               },
-              body: JSON.stringify(imageContent) // body data type must match "Content-Type" header
+              body: formData // body data type must match "Content-Type" header
           })
           .then(response => response.json())
           .catch(error => console.log('Error:', error))
