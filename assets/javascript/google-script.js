@@ -3,7 +3,7 @@
   };
 
   const Logger  = {
-         
+      
       resultDiv: document.getElementById("div-result"),
       
       logResult: function () {
@@ -39,6 +39,8 @@
   };
 
   const GoogleObj = {
+
+    AccessToken : {},
     FileToUpload: {},
     googleObj: this,
     albumObj : {},
@@ -77,7 +79,9 @@
               });
     }, 
 
-    authenticate: function () {            
+    authenticate: function () {   
+      this.AccessToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;   
+      console.log("AccessToken:" + this.AccessToken )   ;
       return gapi.auth2.getAuthInstance()
       .signIn({scope: this.SignInScope })     
       .then(Logger.logResult,Logger.logError);
@@ -130,37 +134,35 @@
         .then(Logger.logAPIResult,Logger.logError); 
     },
 
-    uploadImage : function (imageName, imageContent) {
+    uploadImage : function (accessToken, imageName, imageContent) {
         
         const url = "https://photoslibrary.googleapis.com/v1/uploads";
 
-        console.log("start to upload images...");
-        console.log("imageName:" + imageName);
-        console.log("imageContent:" + imageContent);
-
+        // console.log("start to upload images...");
+        // console.log("imageName:" + imageName);
+        // console.log("imageContent:" + imageContent);
+        console.log(accessToken );
           return fetch(url, {
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
-              mode: 'cors', // no-cors, cors, *same-origin
-              cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-              credentials: 'same-origin', // include, *same-origin, omit
+              mode: 'no-cors', // no-cors, cors, *same-origin
+              cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached              
               headers: {
-                 // 'Authorization': "Bearer " + service._http.request.credentials.access_token,
+                  'Authorization': "Bearer " + accessToken,
                   'Content-Type': 'application/octet-stream',
                   'X-Goog-Upload-File-Name': imageName,
                   'X-Goog-Upload-Protocol': "raw",                  
               },
-              redirect: 'follow', // manual, *follow, error
-              referrer: 'no-referrer', // no-referrer, *client
-              body: JSON.stringify(imageContent), // body data type must match "Content-Type" header
+              body: JSON.stringify(imageContent) // body data type must match "Content-Type" header
           })
           .then(response => response.json())
-          .then(consle.log(JSON.stringify(response))); // parses JSON response into native JavaScript objects 
+          .catch(error => console.log('Error:', error))
+          .then(response => console.log('Success:', JSON.stringify(response)));
     },
 
     selectFiles: function (evt) {
       const files = evt.target.files;       
       const output = [];
-      for (let i = 0, f; f = files[i]; i++) {
+      for (let i = 0, f; f < files.length; i++) {
         output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
                     f.size, ' bytes, last modified: ',
                     f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
@@ -191,15 +193,15 @@
       GoogleObj.picDiv.appendChild(img);
     },
 
-    uploadFile: function (fileToRead, Callback) {
+    uploadFile: function (AccessToken, fileToRead, Callback) {
       var reader = new FileReader();
 
       // Closure to capture the file information.
       reader.onload = function() {
         const fileContent = reader.result;        
-        console.log(fileContent);
+        //console.log(fileContent);
 
-        Callback(fileToRead.name, fileContent);        
+        Callback(AccessToken, fileToRead.name, fileContent);        
       };
       
       reader.readAsDataURL(fileToRead);
@@ -249,8 +251,9 @@
     // }
     //const imageFile = GoogleObj.picDiv.getElementsByTagName("img")[0].src;
     //const canvas = GoogleObj.convertImageToCanvas(imageFile);
-    GoogleObj.uploadFile(GoogleObj.FileToUpload, GoogleObj.uploadImage);
+    GoogleObj.uploadFile(GoogleObj.AccessToken, GoogleObj.FileToUpload, GoogleObj.uploadImage);
 
     //GoogleObj.uploadMediaItem(GoogleObj.albumObj.id, GoogleObj.picDiv.getElementsByTagName("img")[0].src);
     
   });
+
